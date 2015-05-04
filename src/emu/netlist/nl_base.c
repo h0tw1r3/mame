@@ -340,6 +340,10 @@ ATTR_COLD void netlist_base_t::log(const char *format, ...) const
 
 ATTR_COLD netlist_core_device_t::netlist_core_device_t(const family_t afamily)
 : netlist_object_t(DEVICE, afamily)
+#if (NL_KEEP_STATISTICS)
+	, total_time(0)
+	, stat_count(0)
+#endif
 {
 }
 
@@ -496,9 +500,7 @@ ATTR_COLD void netlist_net_t::init_object(netlist_base_t &nl, const pstring &ana
 ATTR_HOT void netlist_net_t::inc_active(netlist_core_terminal_t &term)
 {
 	m_active++;
-
 	m_list_active.insert(term);
-
 	if (m_active == 1)
 	{
 		if (m_in_queue == 0)
@@ -529,7 +531,6 @@ ATTR_HOT void netlist_net_t::dec_active(netlist_core_terminal_t &term)
 {
 	m_active--;
 	m_list_active.remove(term);
-
 	if (m_active == 0 && netlist().use_deactivate())
 			railterminal().netdev().dec_active();
 }
@@ -569,7 +570,7 @@ ATTR_HOT ATTR_ALIGN static inline void update_dev(const netlist_core_terminal_t 
 		begin_timing(netdev.total_time);
 		inc_stat(netdev.stat_count);
 		netdev.update_dev();
-		end_timing(netdev().total_time);
+		end_timing(netdev.total_time);
 	}
 }
 
@@ -578,7 +579,7 @@ ATTR_HOT ATTR_ALIGN inline void netlist_net_t::update_devs()
 	//assert(m_num_cons != 0);
 	nl_assert(this->isRailNet());
 
-	const UINT32 masks[4] = { 1, 5, 3, 1 };
+	static const UINT32 masks[4] = { 1, 5, 3, 1 };
 	const UINT32 mask = masks[ (m_cur_Q  << 1) | m_new_Q ];
 	netlist_core_terminal_t *p = m_list_active.first();
 
@@ -587,6 +588,7 @@ ATTR_HOT ATTR_ALIGN inline void netlist_net_t::update_devs()
 
 	switch (m_active)
 	{
+#if 0
 	case 2:
 		update_dev(p, mask);
 		p = m_list_active.next(p);
@@ -594,6 +596,7 @@ ATTR_HOT ATTR_ALIGN inline void netlist_net_t::update_devs()
 	case 1:
 		update_dev(p, mask);
 		break;
+#endif
 	default:
 		while (p != NULL)
 		{

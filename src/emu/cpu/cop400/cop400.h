@@ -249,8 +249,6 @@ protected:
 
 	/* execution logic */
 	int m_InstLen[256];       /* instruction length in bytes */
-	int m_LBIops[256];
-	int m_LBIops33[256];
 	int m_icount;             /* instruction counter */
 
 	/* timers */
@@ -269,12 +267,12 @@ protected:
 
 	const cop400_opcode_map *m_opcode_map;
 
-	static const cop400_opcode_map COP410_OPCODE_23_MAP[];
-	static const cop400_opcode_map COP410_OPCODE_33_MAP[];
-	static const cop400_opcode_map COP410_OPCODE_MAP[];
-	static const cop400_opcode_map COP420_OPCODE_23_MAP[];
-	static const cop400_opcode_map COP420_OPCODE_33_MAP[];
-	static const cop400_opcode_map COP420_OPCODE_MAP[];
+	static const cop400_opcode_map COP410_OPCODE_23_MAP[256];
+	static const cop400_opcode_map COP410_OPCODE_33_MAP[256];
+	static const cop400_opcode_map COP410_OPCODE_MAP[256];
+	static const cop400_opcode_map COP420_OPCODE_23_MAP[256];
+	static const cop400_opcode_map COP420_OPCODE_33_MAP[256];
+	static const cop400_opcode_map COP420_OPCODE_MAP[256];
 	static const cop400_opcode_map COP444_OPCODE_23_MAP[256];
 	static const cop400_opcode_map COP444_OPCODE_33_MAP[256];
 	static const cop400_opcode_map COP444_OPCODE_MAP[256];
