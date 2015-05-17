@@ -88,6 +88,9 @@ video_manager::video_manager(running_machine &machine)
 		m_throttle_rate(1.0f),
 		m_syncrefresh(machine.options().sync_refresh()),
 		m_fastforward(false),
+		m_startfast(false),
+		m_startfast_skip(machine.options().start_fast_skip()),
+		m_startfast_emutime(attotime::zero),
 		m_seconds_to_run(machine.options().seconds_to_run()),
 		m_auto_frameskip(machine.options().auto_frameskip()),
 		m_speed(original_speed_setting()),
@@ -116,6 +119,23 @@ video_manager::video_manager(running_machine &machine)
 
 	// extract initial execution state from global configuration settings
 	update_refresh_speed();
+
+	// setup startfast
+	const char *startfast = machine.options().start_fast();
+	if (startfast[0] == 0 || strcmp(startfast, "none") == 0) {
+		m_startfast = false;
+	} else {
+		if (strcmp(startfast, "auto") == 0)
+			// TODO: read from config
+			m_startfast_emutime = attotime::from_seconds(3);
+		else
+			m_startfast_emutime = attotime::from_msec(strtod(startfast, NULL));
+
+		if (m_startfast_emutime != attotime::zero)
+			m_startfast = true;
+		else if (!(strcmp(startfast, "auto") == 0))
+			osd_printf_error("Invalid value '%s' for option 'startfast'.\n", startfast);
+	}
 
 	// create a render target for snapshots
 	const char *viewname = machine.options().snap_view();
@@ -203,9 +223,14 @@ void video_manager::frame_update(bool debug)
 	// only render sound and video if we're in the running phase
 	int phase = machine().phase();
 	bool skipped_it = m_skipping_this_frame;
+
 	if (phase == MACHINE_PHASE_RUNNING && (!machine().paused() || machine().options().update_in_pause()))
 	{
-		bool anything_changed = finish_screen_updates();
+		bool anything_changed = false;
+
+		if (!(m_startfast && m_startfast_skip && m_fastforward)) {
+			anything_changed = finish_screen_updates();
+		}
 
 		// if none of the screens changed and we haven't skipped too many frames in a row,
 		// mark this frame as skipped to prevent throttling; this helps for games that
@@ -250,6 +275,9 @@ void video_manager::frame_update(bool debug)
 		if (machine().first_screen() != NULL && (machine().paused() || debug || debugger_within_instruction_hook(machine())))
 			machine().first_screen()->reset_partial_updates();
 	}
+
+	if (m_startfast && !skipped_it)
+		m_fastforward = true;
 }
 
 
@@ -1007,6 +1035,12 @@ void video_manager::recompute_speed(const attotime &emutime)
 
 	// if it has been more than the update interval, update the time
 	attotime delta_emutime = emutime - m_speed_last_emutime;
+
+	if (m_startfast) {
+		if (emutime >= m_startfast_emutime)
+			m_startfast = false;
+	}
+
 	if (delta_emutime > attotime(0, ATTOSECONDS_PER_SPEED_UPDATE))
 	{
 		// convert from ticks to attoseconds

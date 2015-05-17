@@ -66,6 +66,7 @@ public:
 	float throttle_rate() const { return m_throttle_rate; }
 	bool fastforward() const { return m_fastforward; }
 	bool is_recording() const { return (m_mng_file != NULL || m_avi_file != NULL); }
+	bool startfast() const { return m_startfast; }
 
 	// setters
 	void set_frameskip(int frameskip);
@@ -148,6 +149,9 @@ private:
 	float               m_throttle_rate;            // target rate for throttling
 	bool                m_syncrefresh;              // flag: TRUE if we're currently refresh-synced
 	bool                m_fastforward;              // flag: TRUE if we're currently fast-forwarding
+	bool                m_startfast;
+	bool                m_startfast_skip;
+	attotime            m_startfast_emutime;        // fast forward frames until 0
 	UINT32              m_seconds_to_run;           // number of seconds to run before quitting
 	bool                m_auto_frameskip;           // flag: TRUE if we're automatically frameskipping
 	UINT32              m_speed;                    // overall speed (*1000)

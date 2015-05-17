@@ -97,6 +97,8 @@ enum
 #define OPTION_SLEEP                "sleep"
 #define OPTION_SPEED                "speed"
 #define OPTION_REFRESHSPEED         "refreshspeed"
+#define OPTION_STARTFAST            "startfast"
+#define OPTION_STARTFAST_SKIP       "startfast_skip"
 
 // core rotation options
 #define OPTION_ROTATE               "rotate"
@@ -278,6 +280,8 @@ public:
 	bool sleep() const { return bool_value(OPTION_SLEEP); }
 	float speed() const { return float_value(OPTION_SPEED); }
 	bool refresh_speed() const { return bool_value(OPTION_REFRESHSPEED); }
+	const char *start_fast() const { return value(OPTION_STARTFAST); }
+	bool start_fast_skip() const { return bool_value(OPTION_STARTFAST_SKIP); }
 
 	// core rotation options
 	bool rotate() const { return bool_value(OPTION_ROTATE); }
