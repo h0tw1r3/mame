@@ -1,3 +1,5 @@
+// license:BSD-3-Clause
+// copyright-holders:Miodrag Milanovic, Jonathan Gevaryahu
 /***************************************************************************
 
         DEC VT240
@@ -15,7 +17,7 @@
     0x0071: RAM fill to 0x00
     0x1c8f: UPD7220
 
-	// vt240: x2212 nvram at E56
+    // vt240: x2212 nvram at E56
 ****************************************************************************/
 
 #include "emu.h"

@@ -1,3 +1,5 @@
+// license:GPL-2.0+
+// copyright-holders:Couriersud
 /*
  * nld_82S16.c
  *
@@ -5,7 +7,7 @@
 
 #include "nld_82S16.h"
 
-static const netlist_time delay[2] = { NLTIME_FROM_NS(40), NLTIME_FROM_NS(25) };
+//static const netlist_time delay[2] = { NLTIME_FROM_NS(40), NLTIME_FROM_NS(25) };
 
 // FIXME: timing!
 // FIXME: optimize device (separate address decoder!)
@@ -84,7 +86,10 @@ NETLIB_START(82S16_dip)
 	register_input("12",    m_WEQ);
 	register_input("13",    m_DIN);
 
-	register_output("6",   m_DOUTQ);}
+	register_output("6",    m_DOUTQ);
+
+	save(NLNAME(m_ram));
+}
 
 NETLIB_RESET(82S16_dip)
 {

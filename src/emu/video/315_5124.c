@@ -1,3 +1,5 @@
+// license:BSD-3-Clause
+// copyright-holders:Wilbert Pol, Enik Land
 /*********************************************************************
 
     sega315_5124.c
@@ -113,7 +115,7 @@ PALETTE_INIT_MEMBER(sega315_5124_device, sega315_5124)
 		palette.set_pen_color(i, pal2bit(r), pal2bit(g), pal2bit(b));
 	}
 	/* sms and sg1000-mark3 uses a different palette for modes 0 to 3 - see http://www.smspower.org/Development/Palette */
-	/* TMS9918 palette */ 
+	/* TMS9918 palette */
 	palette.set_pen_color(64+ 0,   0,   0,   0); // palette.set_pen_color(64+ 0,   0,   0,   0);
 	palette.set_pen_color(64+ 1,   0,   0,   0); // palette.set_pen_color(64+ 1,   0,   0,   0);
 	palette.set_pen_color(64+ 2,   0, 170,   0); // palette.set_pen_color(64+ 2,  33, 200,  66);
@@ -129,7 +131,7 @@ PALETTE_INIT_MEMBER(sega315_5124_device, sega315_5124)
 	palette.set_pen_color(64+12,   0,  85,   0); // palette.set_pen_color(64+12,  33, 176,  59);
 	palette.set_pen_color(64+13, 255,   0, 255); // palette.set_pen_color(64+13, 201,  91, 186);
 	palette.set_pen_color(64+14,  85,  85,  85); // palette.set_pen_color(64+14, 204, 204, 204);
-	palette.set_pen_color(64+15,   0,   0,   0); // palette.set_pen_color(64+15, 255, 255, 255);
+	palette.set_pen_color(64+15, 255, 255, 255); // palette.set_pen_color(64+15, 255, 255, 255);
 }
 
 

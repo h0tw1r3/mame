@@ -1,3 +1,5 @@
+// license:GPL-2.0+
+// copyright-holders:Couriersud
 /*
  * nld_74175.c
  *
@@ -27,7 +29,7 @@ NETLIB_START(74175_sub)
 
 NETLIB_RESET(74175_sub)
 {
-	m_CLK.set_state(netlist_input_t::STATE_INP_LH);
+	m_CLK.set_state(netlist_logic_t::STATE_INP_LH);
 	m_clrq = 0;
 	m_data = 0xFF;
 }
@@ -71,7 +73,7 @@ NETLIB_UPDATE(74175)
 
 NETLIB_START(74175)
 {
-	register_sub(m_sub, "sub");
+	register_sub("sub", m_sub);
 
 	register_subalias("CLK",   m_sub.m_CLK);
 
@@ -102,7 +104,7 @@ NETLIB_RESET(74175)
 
 NETLIB_START(74175_dip)
 {
-	register_sub(m_sub, "sub");
+	register_sub("sub", m_sub);
 
 	register_subalias("9", m_sub.m_CLK);
 	register_input("1",  m_CLRQ);

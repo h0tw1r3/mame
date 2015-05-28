@@ -1,3 +1,5 @@
+// license:BSD-3-Clause
+// copyright-holders:Tim Lindner
 /*********************************************************************
 
     ds1315.h

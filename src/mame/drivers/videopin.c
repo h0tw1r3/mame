@@ -1,3 +1,5 @@
+// license:BSD-3-Clause
+// copyright-holders:Sebastien Monassa
 /*************************************************************************
 
     Atari Video Pinball driver
@@ -76,7 +78,7 @@ TIMER_CALLBACK_MEMBER(videopin_state::interrupt_callback)
 void videopin_state::machine_start()
 {
 	m_interrupt_timer = timer_alloc(TIMER_INTERRUPT);
-	
+
 	save_item(NAME(m_time_pushed));
 	save_item(NAME(m_time_released));
 	save_item(NAME(m_prev));

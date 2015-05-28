@@ -1,3 +1,5 @@
+// license:GPL-2.0+
+// copyright-holders:Couriersud
 /*
  * nld_9316.c
  *
@@ -9,9 +11,9 @@
 
 NETLIB_START(9316)
 {
-	register_sub(subABCD, "subABCD");
+	register_sub("subABCD", subABCD);
 	sub.m_ABCD = &subABCD;
-	register_sub(sub, "sub");
+	register_sub("sub", sub);
 
 	register_subalias("CLK", sub.m_CLK);
 
@@ -79,7 +81,7 @@ NETLIB_START(9316_sub)
 
 NETLIB_RESET(9316_sub)
 {
-	m_CLK.set_state(netlist_input_t::STATE_INP_LH);
+	m_CLK.set_state(netlist_logic_t::STATE_INP_LH);
 	m_cnt = 0;
 	m_loadq = 1;
 	m_ent = 1;
@@ -89,12 +91,7 @@ NETLIB_UPDATE(9316_sub)
 {
 	if (m_loadq)
 	{
-#if 0
-		m_cnt = (m_cnt < MAXCNT) ? m_cnt + 1 : 0;
-		update_outputs(m_cnt);
-		OUTLOGIC(m_RC, m_ent & (m_cnt == MAXCNT), NLTIME_FROM_NS(20));
-#else
-		switch (m_cnt.get())
+		switch (m_cnt)
 		{
 			case MAXCNT - 1:
 				m_cnt = MAXCNT;
@@ -109,12 +106,12 @@ NETLIB_UPDATE(9316_sub)
 			default:
 				m_cnt++;
 				update_outputs(m_cnt);
+				break;
 		}
-#endif
 	}
 	else
 	{
-		m_cnt = m_ABCD.get()->read_ABCD();
+		m_cnt = m_ABCD->read_ABCD();
 		OUTLOGIC(m_RC, m_ent & (m_cnt == MAXCNT), NLTIME_FROM_NS(27));
 		update_outputs_all(m_cnt, NLTIME_FROM_NS(22));
 	}
@@ -126,7 +123,7 @@ NETLIB_UPDATE(9316)
 	sub.m_ent = INPLOGIC(m_ENT);
 	const netlist_sig_t clrq = INPLOGIC(m_CLRQ);
 
-	if ((!sub.m_loadq | (sub.m_ent & INPLOGIC(m_ENP))) & clrq)
+	if (((sub.m_loadq ^ 1) | (sub.m_ent & INPLOGIC(m_ENP))) & clrq)
 	{
 		sub.m_CLK.activate_lh();
 		OUTLOGIC(sub.m_RC, sub.m_ent & (sub.m_cnt == MAXCNT), NLTIME_FROM_NS(27));
