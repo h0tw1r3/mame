@@ -1916,7 +1916,7 @@ static slider_state *slider_init(running_machine &machine)
 		{
 			void *param = (void *)&exec->device();
 			strprintf(str, "Overclock CPU %s", exec->device().tag());
-			*tailptr = slider_alloc(machine, str.c_str(), 10, 1000, 2000, 1, slider_overclock, param);
+			*tailptr = slider_alloc(machine, str.c_str(), 10, 1000, 4000, 10, slider_overclock, param);
 			tailptr = &(*tailptr)->next;
 		}
 	}

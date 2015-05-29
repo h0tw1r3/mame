@@ -13143,6 +13143,8 @@ mg_risk     // Risk
 mg_scl      // Super Clue
 mg_kf       // Krypton Factor
 
+
+
 /* Below are misc lazy adds, or yet to be sorted out... */
 
 barata
@@ -13188,7 +13190,7 @@ cocoloco   // 198?, Petaco S.A.
 
 alinvade
 
-// MAMEUIFX extra games and hacks
+// MAMEUIFX extra games
 asteroid6		// hack
 bublcave		// hack
 bublredux		// hack
@@ -13199,6 +13201,7 @@ ketarr17		// hack
 kof2002xxx		// hack
 kof97xxx		// hack
 mrdonight		// hack
+mslug2t			// hack
 mslug3v			// hack
 outrunen		// hack
 pacminer		// hack
