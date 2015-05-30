@@ -54,7 +54,7 @@ function maintargetosdoptions(_target,_subtarget)
 		MAME_DIR .. "src/osd/winui/mameui.rc",
 	}
 	dependency {
-		{ "$(OBJDIR)/mameui.res" ,  GEN_DIR  .. "/resource/" .. "arcadevers.rc", true  },
+		{ "$(OBJDIR)/mameui.res" ,  GEN_DIR  .. "/resource/" .. _target .. "vers.rc", true  },
 	}
 end
 
