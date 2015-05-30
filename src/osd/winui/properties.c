@@ -184,7 +184,7 @@ static BOOL SelectShader3(HWND hWnd);
 static BOOL ResetShader3(HWND hWnd);
 static BOOL SelectCheatFile(HWND hWnd);
 static BOOL ResetCheatFile(HWND hWnd);
-static BOOL SelectJoystickMap(HWND hWnd);
+static BOOL ChangeJoystickMap(HWND hWnd);
 static BOOL ResetJoystickMap(HWND hWnd);
 static BOOL SelectDebugscript(HWND hWnd);
 static BOOL ResetDebugscript(HWND hWnd);
@@ -1473,8 +1473,8 @@ INT_PTR CALLBACK GameOptionsProc(HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lPar
 			changed = ResetCheatFile(hDlg);
 			break;
 
-		case IDC_SELECT_JOYSTICKMAP:
-			changed = SelectJoystickMap(hDlg);
+		case IDC_JOYSTICKMAP:
+			changed = ChangeJoystickMap(hDlg);
 			break;
 
 		case IDC_RESET_JOYSTICKMAP:
@@ -2003,14 +2003,7 @@ static void OptionsToProp(HWND hWnd, windows_options &o)
 	hCtrl = GetDlgItem(hWnd, IDC_JOYSTICKMAP);
 	
 	if (hCtrl) 
-	{
-		const char* joymap = o.value(OPTION_JOYSTICK_MAP);
-		
-		if (strcmp(joymap, "auto") == 0)
-			win_set_window_text_utf8(hCtrl, "Auto");
-		else
-			win_set_window_text_utf8(hCtrl, joymap);
-	}
+		win_set_window_text_utf8(hCtrl, o.value(OPTION_JOYSTICK_MAP));
 
 	hCtrl = GetDlgItem(hWnd, IDC_DEBUGSCRIPT);
 	
@@ -3555,43 +3548,24 @@ static BOOL ResetCheatFile(HWND hWnd)
 	return changed;
 }
 
-static BOOL SelectJoystickMap(HWND hWnd)
+static BOOL ChangeJoystickMap(HWND hWnd)
 {
-	char filename[MAX_PATH];
 	BOOL changed = FALSE;
-	char buff[MAX_PATH];
-	int i, j = 0, k = 0, l = 0, h = 0;
+	WCHAR szText[256];
 
-	*filename = 0;
-	
-	if (CommonFileDialog(GetOpenFileName, filename, FILETYPE_JOYMAP_FILES))
+	(void) GetDlgItemText(hWnd, IDC_JOYSTICKMAP, szText, sizeof(szText));
+	char *op_val = utf8_from_tstring(szText);
+
+	if (strcmp(op_val, pCurrentOpts.value(OPTION_JOYSTICK_MAP)))
 	{
-		for (i = 0; i < strlen(filename); i++)
-		{
-			if (filename[i] == '\\')
-				j = i;
-
-			if (filename[i] == '.')
-				k = i;
-		}
-		
-		for (i = j + 1; i < k; i++)
-		{
-			buff[l++] = filename[i];
-		}
-		
-		buff[l] = '\0';
-
-		if (strcmp(buff, pCurrentOpts.value(OPTION_JOYSTICK_MAP)))
-		{
-			std::string error_string;
-			pCurrentOpts.set_value(OPTION_JOYSTICK_MAP, buff, OPTION_PRIORITY_CMDLINE, error_string);
-			assert(error_string.empty());
-			win_set_window_text_utf8(GetDlgItem(hWnd, IDC_JOYSTICKMAP), buff);
-			changed = TRUE;
-		}
+		std::string error_string;
+		pCurrentOpts.set_value(OPTION_JOYSTICK_MAP, op_val, OPTION_PRIORITY_CMDLINE, error_string);
+		assert(error_string.empty());
+		changed = TRUE;
 	}
-	
+
+	osd_free(op_val);
+
 	return changed;
 }
 
@@ -3605,7 +3579,7 @@ static BOOL ResetJoystickMap(HWND hWnd)
 		std::string error_string;
 		pCurrentOpts.set_value(OPTION_JOYSTICK_MAP, new_value, OPTION_PRIORITY_CMDLINE, error_string);
 		assert(error_string.empty());
-		win_set_window_text_utf8(GetDlgItem(hWnd, IDC_JOYSTICKMAP), "Auto");
+		win_set_window_text_utf8(GetDlgItem(hWnd, IDC_JOYSTICKMAP), new_value);
 		changed = TRUE;
 	}
 	
