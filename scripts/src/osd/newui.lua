@@ -40,11 +40,15 @@ function maintargetosdoptions(_target,_subtarget)
 		"ole32",
 	}
 
+	includedirs {
+		MAME_DIR .. "src/osd/winui/res"
+	}
+
 -- needs same resources as messui, because dropdown menus are in mameui.rc
 	override_resources = true;
-	rctarget = _subtarget;
-	local rcfile = MAME_DIR .. "src/osd/winui/" .. _subtarget .. ".rc"
-	local uifile = MAME_DIR .. "src/osd/winui/" .. _subtarget .. "ui.rc"
+	rctarget = _target;
+	local rcfile = MAME_DIR .. "src/osd/winui/" .. _target .. ".rc"
+	local uifile = MAME_DIR .. "src/osd/winui/" .. _target .. "ui.rc"
 
 	if not os.isfile(rcfile) then
 		print(string.format("***** %s not found *****",rcfile))

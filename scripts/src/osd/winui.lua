@@ -62,6 +62,10 @@ function maintargetosdoptions(_target,_subtarget)
 		"ole32",
 	}
 
+	includedirs {
+		MAME_DIR .. "src/osd/winui/res"
+	}
+
 -- Local file gives correct icon in mame instance inside of mameui
 -- Local file must #include mameui.rc
 	override_resources = true;
