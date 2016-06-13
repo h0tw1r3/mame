@@ -2,6 +2,7 @@
 # license:BSD-3-Clause
 # copyright-holders:Olivier Galibert
 
+import os
 import sys
 import re
 
@@ -13,8 +14,9 @@ states_to_dispatch = { 0 : "MAIN" }
 
 def load_file(fname, lines):
 	path = fname.rpartition('/')[0]
-	if path != "":
-		path += '/'
+	if path == "":
+		path = os.path.dirname(sys.argv[0])
+	path += '/'
 	try:
 		f = open(fname, "rU")
 	except Exception:
